@@ -1,0 +1,106 @@
+@extends('layouts.app')
+@section('content')
+
+    <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <h6 class="border-bottom pb-2 mb-4"> Ajout d'un collaborateur </h6>
+        <div class="col-6 justify-content-center">
+            @if (session()->has('success'))
+                <div class="alert alert-success">
+                    <h3>{{ session()->get('success') }}</h3>
+                </div>
+            @endif
+            @if (session()->has('fail'))
+                <div class="alert alert-danger">
+                    <h3>{{ session()->get('fail') }}</h3>
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            <form style="width:65%;" method="post"
+                action="{{ route('collaborateurs.update', ['collaborateur' => $collaborateur->id]) }}">
+                @csrf
+                <input type="hidden" name="_method" value="put">
+                <div class="form-group">
+                    <label for="civilité">Sélectionnez la civilité du collaborateur</label>
+
+                    <select class="form-control" name="civilité" id="civilité" aria-label="civilité">
+                        <option value="" disabled selected>{{ $collaborateur->civilité }}</option>
+                        <option value="Homme">Homme</option>
+                        <option value="Femme">Femme</option>
+                        <option value="Non-binaire">Non-binaire</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="nom">Nom </label>
+                    <input type="text" class="form-control" name="nom" id="nom" placeholder="" required
+                        value="{{ $collaborateur->nom }}">
+                    <small id=" nomHelp" class="form-text text-muted">Le nom du collaborateur est obligatoire.</small>
+                </div>
+                <div class="form-group">
+                    <label for="prenom">Prénom </label>
+                    <input type="text" class="form-control" name="prenom" id="prenom" placeholder=""
+                        value="{{ $collaborateur->prenom }}" required>
+                    <small id="prenomHelp" class="form-text text-muted">Le prénom du collaborateur est obligatoire.</small>
+                </div>
+                <div class="form-group">
+                    <label for="rue">Rue</label>
+                    <input type="text" class="form-control" name="rue" id="rue" placeholder=""
+                        value="{{ $collaborateur->rue }}" required>
+                    <small id="rueHelp" class="form-text text-muted">La rue est obligatoire.</small>
+                </div>
+                <div class="form-group">
+                    <label for="cp">Code Postal</label>
+                    <input type="text" class="form-control" required name="cp" id="cp" placeholder=""
+                        value="{{ $collaborateur->cp }}">
+                    <small id="cpHelp" class="form-text text-muted">Le code postal du collaborateur est
+                        obligatoire. (ex:75000)</small>
+                </div>
+                <div class="form-group">
+                    <label for="ville">Ville</label>
+                    <input type="text" class="form-control" name="ville" id="cp" placeholder=""
+                        value="{{ $collaborateur->ville }}" required>
+                    <small id="villeHelp" class="form-text text-muted">La ville est obligatoire.</small>
+                </div>
+                <div class="form-group">
+                    <label for="telephone">Numéro de téléphone</label>
+                    <input type="text" class="form-control" name="telephone" id="telephone" placeholder=""
+                        value="{{ $collaborateur->téléphone }}">
+                    <small id="telHelp" class="form-text text-muted"></small>
+                </div>
+                <div class="form-group">
+                    <label for="email">Adresse mail</label>
+                    <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp"
+                        placeholder="a@a.a" value="{{ $collaborateur->email }}" required>
+                    <small id="emailHelp" class="form-text text-muted"></small>
+                </div>
+                <div class="form-group">
+                    <label for="entreprise_selection">Sélectionnez l'entreprise collaborateur</label>
+                    <select class="form-control" name="entreprise_id" id="selection_selection" aria-label="entreprise_id">
+                        <option selected>Choisir l'entreprise</option>
+                        @foreach ($entreprises as $entreprise)
+                            @if ($entreprise->id == $collaborateur->entreprise_id)
+                                <option value="{{ $entreprise->id }}" selected>{{ $entreprise->nom }}</option>
+                            @else
+                                <option value="{{ $entreprise->id }}">{{ $entreprise->nom }}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+
+
+
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+                <a href="{{ route('collaborateurs') }}" class="btn btn-danger">Annuler</a>
+            </form>
+
+
+        </div>
+    </div>
+@endsection
